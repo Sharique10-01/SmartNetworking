@@ -8,14 +8,14 @@ void formatMacAddress(const uint8_t *macAddr, char *buffer, int maxLength) {
     snprintf(buffer, maxLength, "%02x:%02x:%02x:%02x:%02x:%02x", macAddr[0], macAddr[1], macAddr[2], macAddr[3], macAddr[4], macAddr[5]);
 }
 
-void receiveCallback(const esp_now_recv_info *recvInfo, const uint8_t *data, int dataLen) {
+void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen) {
     char buffer[ESP_NOW_MAX_DATA_LEN + 1];
     int msgLen = min(ESP_NOW_MAX_DATA_LEN, dataLen);
     strncpy(buffer, (const char *)data, msgLen);
     buffer[msgLen] = 0;
 
     char macStr[18];
-    formatMacAddress(recvInfo->src_addr, macStr, 18);
+    formatMacAddress(macAddr, macStr, 18);
     Serial.printf("Received message from: %s - %s\n", macStr, buffer);
 
     // Control the built-in LED based on received message
@@ -68,7 +68,7 @@ void setup() {
 
     if (esp_now_init() == ESP_OK) {
         Serial.println("ESP-NOW Init Success");
-        esp_now_register_recv_cb(receiveCallback);  // Updated callback
+        esp_now_register_recv_cb(receiveCallback);
         esp_now_register_send_cb(sentCallback);
     } else {
         Serial.println("ESP-NOW Init Failed");
