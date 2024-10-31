@@ -9,7 +9,7 @@ typedef struct sensor_data_t {
 sensor_data_t myData;
 
 // MAC address of Node 2
-uint8_t peer_addr_B[] = { 0xFC, 0xF5, 0xC4, 0x6E, 0x97, 0x6C }; // Replace with actual MAC of Node 2
+uint8_t peer_addr_B[] = { 0xFC, 0xF5, 0xC4, 0x6E, 0x97, 0x6C }; // Replaced with  MAC of Node 2
 
 void setup() {
     Serial.begin(115200);
@@ -22,6 +22,7 @@ void setup() {
     }
 
     // Add Node 2 as a peer
+    
     esp_now_peer_info_t peer_B;
     memcpy(peer_B.peer_addr, peer_addr_B, 6);
     peer_B.channel = 0;  // Use the current channel
@@ -33,7 +34,7 @@ void setup() {
         return;
     }
 
-    myData.id = 1; // Set ID for this node
+    myData.id = 1; // Set ID for this node this will be unique and random for every new msg
 }
 
 void loop() {
